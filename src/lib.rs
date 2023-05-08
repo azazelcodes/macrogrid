@@ -3,14 +3,14 @@ use macroquad::prelude::*;
 // TODO padding, write text
 
 pub struct Grid {
-    width: i32,  // width of the grid in pixels
-    height: i32, // height of the grid in pixels
+    width: f32,  // width of the grid in pixels
+    height: f32, // height of the grid in pixels
 
     width_cells: i32,                  // number of cells
     height_cells: i32,                 // number of cells
     bg_color: macroquad::color::Color, // color of the cells
 
-    gap: i32, // space between cells (in pixels)
+    gap: f32, // space between cells (in pixels)
     gap_color: macroquad::color::Color,
 
     selected: Option<i32>, // selected cell (if needed)
@@ -20,12 +20,12 @@ pub struct Grid {
 impl Default for Grid {
     fn default() -> Self {
         Grid {
-            width: screen_width() as i32,
-            height: screen_height() as i32,
+            width: screen_width(),
+            height: screen_height(),
             width_cells: 10,
             height_cells: 10,
             bg_color: RED,
-            gap: 3,
+            gap: 3.0,
             gap_color: PINK,
             selected: None,
             selected_color: Some(BLUE),
@@ -34,7 +34,7 @@ impl Default for Grid {
 }
 
 impl Grid {
-    pub fn new(width: i32, height: i32, x_cells: i32, y_cells: i32, gap: i32) -> Self {
+    pub fn new(width: f32, height: f32, x_cells: i32, y_cells: i32, gap: f32) -> Self {
         Grid {
             width,
             height,
@@ -49,13 +49,13 @@ impl Grid {
     }
 
     // returns the (width, height) of each cell
-    fn calculate_dimensions(&self) -> (i32, i32) {
+    fn calculate_dimensions(&self) -> (f32, f32) {
         // in pixels
-        let total_x_gap_space = (self.width_cells - 1) * self.gap;
-        let total_y_gap_space = (self.height_cells - 1) * self.gap;
+        let total_x_gap_space = (self.width_cells + 1) as f32 * self.gap;
+        let total_y_gap_space = (self.height_cells + 1) as f32 * self.gap;
 
-        let cell_width = (self.width - total_x_gap_space) / self.width_cells;
-        let cell_height = (self.height - total_y_gap_space) / self.height_cells;
+        let cell_width = (self.width - total_x_gap_space as f32) / self.width_cells as f32;
+        let cell_height = (self.height - total_y_gap_space as f32) / self.height_cells as f32;
 
         (cell_width, cell_height)
     }
@@ -65,8 +65,8 @@ impl Grid {
         draw_rectangle(
             0.0,
             0.0,
-            self.width as f32,
-            self.height as f32,
+            self.width,
+            self.height,
             self.gap_color,
         );
 
@@ -75,14 +75,14 @@ impl Grid {
 
         for i in 0..self.height_cells {
             for j in 0..self.width_cells {
-                let x_pos = j * (cell_width + self.gap);
-                let y_pos = i * (cell_height + self.gap);
+                let x_pos = self.gap + j as f32 * (cell_width + self.gap as f32);
+                let y_pos = self.gap + i as f32 * (cell_height + self.gap as f32);
 
                 draw_rectangle(
-                    x_pos as f32,
-                    y_pos as f32,
-                    cell_width as f32,
-                    cell_height as f32,
+                    x_pos,
+                    y_pos,
+                    cell_width,
+                    cell_height,
                     self.bg_color,
                 );
             }

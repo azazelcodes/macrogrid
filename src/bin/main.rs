@@ -8,7 +8,7 @@ async fn main() {
         clear_background(GREEN);
 
         //macroquad_grid::temp();
-        let g = Grid::new(200, 200, 10, 10, 5);
+        let g = Grid::new(200.0, 200.0, 10, 10, 5.0);
 
         g.draw();
 
