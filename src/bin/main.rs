@@ -5,12 +5,12 @@ use macroquad_grid::Grid;
 #[macroquad::main("BasicShapes")]
 async fn main() {
     loop {
-        clear_background(RED);
+        clear_background(BLUE);
 
         //macroquad_grid::temp();
-        let g = Grid::new(1, 1, 0);
+        let g = Grid::default();
 
-        // let (cell_width, cell_height) = g.calculate_dimensions();
+        g.draw();
 
         next_frame().await
     }

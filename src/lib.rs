@@ -5,6 +5,7 @@ use macroquad::prelude::*;
 pub struct Grid {
     width: i32, // number of cells
     height: i32, // number of cells
+    bg_color: macroquad::color::Color,
     gap: i32, // space between cells (in pixels)
     gap_color: macroquad::color::Color,
     selected: Option<i32>, // selected cell (if needed)
@@ -13,13 +14,13 @@ pub struct Grid {
 
 impl Default for Grid {
     fn default() -> Self {
-        Grid { width: 10, height: 10, gap: 3, gap_color: BLACK, selected: None, selected_color: Some(BLUE) }
+        Grid { width: 10, height: 10, bg_color: RED, gap: 3, gap_color: BLACK, selected: None, selected_color: Some(BLUE) }
     }
 }
 
 impl Grid {
     pub fn new(width: i32, height: i32, gap: i32) -> Self {
-        Grid { width, height, gap, gap_color: BLACK, selected: None, selected_color: Some(BLUE) }
+        Grid { width, height, bg_color: RED, gap, gap_color: BLACK, selected: None, selected_color: Some(BLUE) }
     }
 
     // returns the (width, height) of each cell
@@ -38,7 +39,15 @@ impl Grid {
     }
 
     pub fn draw(&self) {
-        todo!()
+        let (cell_width, cell_height) = self.calculate_dimensions();
+
+        for i in 0..self.height {
+            for j in 0..self.width {
+                let x_pos = j * (cell_width + self.gap);
+                let y_pos = i * (cell_height + self.gap);
+                draw_rectangle(x_pos as f32, y_pos as f32, cell_width as f32, cell_height as f32, self.bg_color);
+            }
+        }
     }
 }
 
