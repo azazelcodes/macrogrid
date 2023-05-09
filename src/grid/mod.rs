@@ -13,28 +13,39 @@ pub struct Grid {
     gap: f32, // space between cells (in pixels)
     gap_color: macroquad::color::Color,
 
+    // is a vec really needed here? how use const bro
+    cells: Vec<Vec<cell::Cell>>,
+
     selected_cell: Option<(i32, i32)>, // selected cell (if needed)
     selected_color: Option<macroquad::color::Color>,
 }
 
 impl Default for Grid {
     fn default() -> Self {
+        const WIDTH: i32 = 10;
+        const HEIGHT: i32 = 10;
         Grid {
             width: screen_width(),
             height: screen_height(),
-            width_cells: 10,
-            height_cells: 10,
+            width_cells: WIDTH,
+            height_cells: HEIGHT,
             bg_color: RED,
             gap: 3.0,
             gap_color: PINK,
             selected_cell: None,
             selected_color: Some(BLUE),
+            // ignore the HORRID line below this comment
+            // it just makes a 2D list of cell::default's
+            // there are HEIGHT inner lists and they all have WIDTH elements
+            cells: (0..HEIGHT).into_iter().map(|_| (0..WIDTH).into_iter().map(|_| cell::Cell::default()).collect::<Vec<_>>()).collect()
         }
     }
 }
 
 impl Grid {
     pub fn new(width: f32, height: f32, x_cells: i32, y_cells: i32, gap: f32) -> Self {
+        const WIDTH: i32 = 10;
+        const HEIGHT: i32 = 10;
         Grid {
             width,
             height,
@@ -45,6 +56,10 @@ impl Grid {
             gap_color: BLACK,
             selected_cell: None,
             selected_color: Some(BLUE),
+            // ignore the HORRID line below this comment
+            // it just makes a 2D list of cell::default's
+            // there are HEIGHT inner lists and they all have WIDTH elements
+            cells: (0..HEIGHT).into_iter().map(|_| (0..WIDTH).into_iter().map(|_| cell::Cell::default()).collect::<Vec<_>>()).collect()
         }
     }
 
@@ -69,22 +84,32 @@ impl Grid {
 
         for i in 0..self.height_cells {
             for j in 0..self.width_cells {
-                let x_pos = self.gap + j as f32 * (cell_width + self.gap as f32);
-                let y_pos = self.gap + i as f32 * (cell_height + self.gap as f32);
-
-                let mut color = self.bg_color;
-                // if this is the selected_cell, use the other color
-                if let Some((row, col)) = self.selected_cell {
-                    if row == i && col == j {
-                        color = self
-                            .selected_color
-                            .expect("there was a selected cell but no selected color");
-                    }
-                }
-
-                draw_rectangle(x_pos, y_pos, cell_width, cell_height, color);
+                self.draw_cell(i, j, cell_width, cell_height);
             }
         }
+    }
+
+    // only called from the double for loop in the draw function
+    // this way it does not look crouded as fuck
+    //
+    // this function calculates the cells position (takes gap into account)
+    // it also handles any special coloring that might need to happen
+    // it also prints any text to the screen (if applicable)
+    fn draw_cell(&self, row: i32, col: i32, cell_width: f32, cell_height: f32) {
+        let x_pos = self.gap + col as f32 * (cell_width + self.gap as f32);
+        let y_pos = self.gap + row as f32 * (cell_height + self.gap as f32);
+
+        let mut color = self.bg_color;
+        // if this is the selected_cell, use the other color
+        if let Some((row, col)) = self.selected_cell {
+            if row == row && col == col {
+                color = self
+                    .selected_color
+                    .expect("there was a selected cell but no selected color");
+            }
+        }
+
+        draw_rectangle(x_pos, y_pos, cell_width, cell_height, color);
     }
 
     pub fn select(&mut self, row: i32, col: i32) {
