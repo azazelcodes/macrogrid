@@ -114,9 +114,8 @@ impl Grid {
         // draw it!
         draw_rectangle(x_pos, y_pos, cell_width, cell_height, color);
 
-        // draw text, if needed
         if let Some(text) = &self.cells[row as usize][col as usize].value {
-            draw_text(text, x_pos, y_pos, 30.0, BLACK);
+            draw_text(text, x_pos, y_pos, 90.0, BLACK);
         }
     }
 
