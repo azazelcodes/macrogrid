@@ -13,7 +13,7 @@ pub struct Grid {
     gap: f32, // space between cells (in pixels)
     gap_color: macroquad::color::Color,
 
-    selected: Option<i32>, // selected cell (if needed)
+    selected_cell: Option<(i32, i32)>, // selected cell (if needed)
     selected_color: Option<macroquad::color::Color>,
 }
 
@@ -27,7 +27,7 @@ impl Default for Grid {
             bg_color: RED,
             gap: 3.0,
             gap_color: PINK,
-            selected: None,
+            selected_cell: None,
             selected_color: Some(BLUE),
         }
     }
@@ -43,7 +43,7 @@ impl Grid {
             bg_color: RED,
             gap,
             gap_color: BLACK,
-            selected: None,
+            selected_cell: None,
             selected_color: Some(BLUE),
         }
     }
@@ -78,15 +78,31 @@ impl Grid {
                 let x_pos = self.gap + j as f32 * (cell_width + self.gap as f32);
                 let y_pos = self.gap + i as f32 * (cell_height + self.gap as f32);
 
+                let mut color = self.bg_color;
+                // if this is the selected_cell, use the other color
+                if let Some( (row, col) ) = self.selected_cell {
+                    if row == i && col == j {
+                        color = self.selected_color.expect("there was a selected cell but no selected color");
+                    }
+                }
+                    
                 draw_rectangle(
                     x_pos,
                     y_pos,
                     cell_width,
                     cell_height,
-                    self.bg_color,
+                    color,
                 );
             }
         }
+    }
+
+    pub fn select(&mut self, row: i32, col: i32) {
+        self.selected_cell.insert( (row, col) );
+    }
+
+    pub fn color_cell(&mut self, row: i32, col: i32, color: macroquad::color::Color) -> anyhow::Result<()> {
+        todo!()
     }
 }
 

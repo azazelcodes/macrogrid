@@ -4,13 +4,16 @@ use macroquad_grid::Grid;
 
 #[macroquad::main("BasicShapes")]
 async fn main() {
+    //macroquad_grid::temp();
+    let mut g = Grid::new(500.0, 500.0, 6, 6, 5.0);
+    //let g = Grid::default()
+
     loop {
         clear_background(GREEN);
 
-        //macroquad_grid::temp();
-        let g = Grid::new(200.0, 200.0, 10, 10, 5.0);
-
         g.draw();
+
+        g.select(1, 1);
 
         next_frame().await
     }
