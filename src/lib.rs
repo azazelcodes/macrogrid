@@ -62,13 +62,7 @@ impl Grid {
 
     pub fn draw(&self) {
         // draw background (the gap color)
-        draw_rectangle(
-            0.0,
-            0.0,
-            self.width,
-            self.height,
-            self.gap_color,
-        );
+        draw_rectangle(0.0, 0.0, self.width, self.height, self.gap_color);
 
         // draw cells
         let (cell_width, cell_height) = self.calculate_dimensions();
@@ -80,28 +74,29 @@ impl Grid {
 
                 let mut color = self.bg_color;
                 // if this is the selected_cell, use the other color
-                if let Some( (row, col) ) = self.selected_cell {
+                if let Some((row, col)) = self.selected_cell {
                     if row == i && col == j {
-                        color = self.selected_color.expect("there was a selected cell but no selected color");
+                        color = self
+                            .selected_color
+                            .expect("there was a selected cell but no selected color");
                     }
                 }
-                    
-                draw_rectangle(
-                    x_pos,
-                    y_pos,
-                    cell_width,
-                    cell_height,
-                    color,
-                );
+
+                draw_rectangle(x_pos, y_pos, cell_width, cell_height, color);
             }
         }
     }
 
     pub fn select(&mut self, row: i32, col: i32) {
-        self.selected_cell.insert( (row, col) );
+        self.selected_cell = Some((row, col))
     }
 
-    pub fn color_cell(&mut self, row: i32, col: i32, color: macroquad::color::Color) -> anyhow::Result<()> {
+    pub fn color_cell(
+        &mut self,
+        row: i32,
+        col: i32,
+        color: macroquad::color::Color,
+    ) -> anyhow::Result<()> {
         todo!()
     }
 }
