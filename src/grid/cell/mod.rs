@@ -6,7 +6,7 @@
 #[derive(Default)]
 pub struct Cell {
     pub color: Option<macroquad::color::Color>,
-    pub value: String,
+    pub value: Option<String>,
     pub text_color: Option<macroquad::color::Color>
 }
 
