@@ -4,7 +4,7 @@
 
 // simple ass struct, doesn't even have no impl
 #[derive(Default)]
-struct Cell {
+pub struct Cell {
     pub color: Option<macroquad::color::Color>,
     pub value: String,
     pub text_color: Option<macroquad::color::Color>

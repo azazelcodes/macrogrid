@@ -1,6 +1,6 @@
 use macroquad::prelude::*;
 
-use macroquad_grid::Grid;
+use macroquad_grid::grid::Grid;
 
 #[macroquad::main("BasicShapes")]
 async fn main() {

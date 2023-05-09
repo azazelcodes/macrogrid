@@ -2,7 +2,7 @@ use macroquad::prelude::*;
 
 // TODO padding, write text
 
-mod grid;
+pub mod grid;
 
 #[cfg(test)]
 mod tests {
