@@ -4,8 +4,8 @@ mod cell;
 mod position;
 
 pub struct Grid {
-    width: f32,  // width of the grid in pixels
-    height: f32, // height of the grid in pixels
+    width: f32,                   // width of the grid in pixels
+    height: f32,                  // height of the grid in pixels
     x_offset: position::Position, // for positioning the grid on the screen
     y_offset: position::Position, // for positioning the grid on the screen
 
@@ -40,7 +40,15 @@ impl Default for Grid {
             // ignore the HORRID line below this comment
             // it just makes a 2D list of cell::default's
             // there are HEIGHT inner lists and they all have WIDTH elements
-            cells: (0..HEIGHT).into_iter().map(|_| (0..WIDTH).into_iter().map(|_| cell::Cell::default()).collect::<Vec<_>>()).collect(),
+            cells: (0..HEIGHT)
+                .into_iter()
+                .map(|_| {
+                    (0..WIDTH)
+                        .into_iter()
+                        .map(|_| cell::Cell::default())
+                        .collect::<Vec<_>>()
+                })
+                .collect(),
             x_offset: position::Position::default(),
             y_offset: position::Position::default(),
         }
@@ -49,11 +57,11 @@ impl Default for Grid {
 
 impl Grid {
     pub fn set_x_offset(&mut self, x_offset: position::Position) {
-        self.x_offset = x_offset; 
+        self.x_offset = x_offset;
     }
 
     pub fn set_y_offset(&mut self, y_offset: position::Position) {
-        self.y_offset = y_offset; 
+        self.y_offset = y_offset;
     }
 
     pub fn new(width: f32, height: f32, x_cells: i32, y_cells: i32, gap: f32) -> Self {
@@ -72,7 +80,15 @@ impl Grid {
             // ignore the HORRID line below this comment
             // it just makes a 2D list of cell::default's
             // there are HEIGHT inner lists and they all have WIDTH elements
-            cells: (0..HEIGHT).into_iter().map(|_| (0..WIDTH).into_iter().map(|_| cell::Cell::default()).collect::<Vec<_>>()).collect(),
+            cells: (0..HEIGHT)
+                .into_iter()
+                .map(|_| {
+                    (0..WIDTH)
+                        .into_iter()
+                        .map(|_| cell::Cell::default())
+                        .collect::<Vec<_>>()
+                })
+                .collect(),
             x_offset: position::Position::default(),
             y_offset: position::Position::default(),
         }
@@ -112,7 +128,15 @@ impl Grid {
     // this function calculates the cells position (takes gap into account)
     // it also handles any special coloring that might need to happen
     // it also prints any text to the screen (if applicable)
-    fn draw_cell(&self, row: i32, col: i32, cell_width: f32, cell_height: f32, x_offset: f32, y_offset: f32) {
+    fn draw_cell(
+        &self,
+        row: i32,
+        col: i32,
+        cell_width: f32,
+        cell_height: f32,
+        x_offset: f32,
+        y_offset: f32,
+    ) {
         // cell cords
         let x_pos = x_offset + self.gap + col as f32 * (cell_width + self.gap as f32);
         let y_pos = y_offset + self.gap + row as f32 * (cell_height + self.gap as f32);
@@ -126,6 +150,12 @@ impl Grid {
                     .selected_color
                     .expect("there was a selected cell but no selected color");
             }
+        }
+
+        // and if it had a preset color then use that
+        else if let Some(set_color) = self.cells[row as usize][col as usize].color {
+            // somehow we never reach this??
+            color = set_color;
         }
 
         // draw it!
@@ -149,12 +179,7 @@ impl Grid {
         self.selected_cell = Some((row, col))
     }
 
-    pub fn color_cell(
-        &mut self,
-        row: i32,
-        col: i32,
-        color: macroquad::color::Color,
-    ) -> anyhow::Result<()> {
-        self.cells[row as usize][col as usize]
+    pub fn color_cell(&mut self, row: i32, col: i32, color: macroquad::color::Color) {
+        self.cells[row as usize][col as usize].color = Some(color);
     }
 }

@@ -11,6 +11,8 @@ async fn main() {
 
     g.select(1, 1);
 
+    g.color_cell(2, 2, YELLOW);
+
     g.cells[3][3].value = Some(String::from("hi"));
     loop {
         clear_background(GREEN);
