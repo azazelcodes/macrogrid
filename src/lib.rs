@@ -1,5 +1,3 @@
-use macroquad::prelude::*;
-
 // TODO padding, write text
 
 pub mod grid;
