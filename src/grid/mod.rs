@@ -116,7 +116,15 @@ impl Grid {
 
         // draw the text if this cell has any
         if let Some(text) = &self.cells[row as usize][col as usize].value {
-            draw_text(text, x_pos, y_pos + cell_height, cell_height, BLACK);
+            // shifted because read the readme
+            let y_pos = y_pos + cell_height;
+
+            // center the text or something idk
+            let text_dim = macroquad::text::measure_text(text, None, cell_height as u16, 1.0); // 1.0 is default
+            let centered_x = (cell_width - text_dim.width) / 2.0 + x_pos;
+            let centered_y = y_pos - (cell_height - text_dim.height) / 2.0;
+
+            draw_text(text, centered_x, centered_y, cell_height, BLACK);
         }
     }
 
