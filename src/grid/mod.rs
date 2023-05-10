@@ -155,6 +155,6 @@ impl Grid {
         col: i32,
         color: macroquad::color::Color,
     ) -> anyhow::Result<()> {
-        todo!()
+        self.cells[row as usize][col as usize]
     }
 }
