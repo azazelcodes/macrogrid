@@ -6,6 +6,8 @@ mod position;
 pub struct Grid {
     width: f32,  // width of the grid in pixels
     height: f32, // height of the grid in pixels
+    x_offset: position::Position, // for positioning the grid on the screen
+    y_offset: position::Position, // for positioning the grid on the screen
 
     width_cells: i32,                  // number of cells
     height_cells: i32,                 // number of cells
@@ -38,12 +40,22 @@ impl Default for Grid {
             // ignore the HORRID line below this comment
             // it just makes a 2D list of cell::default's
             // there are HEIGHT inner lists and they all have WIDTH elements
-            cells: (0..HEIGHT).into_iter().map(|_| (0..WIDTH).into_iter().map(|_| cell::Cell::default()).collect::<Vec<_>>()).collect()
+            cells: (0..HEIGHT).into_iter().map(|_| (0..WIDTH).into_iter().map(|_| cell::Cell::default()).collect::<Vec<_>>()).collect(),
+            x_offset: position::Position::default(),
+            y_offset: position::Position::default(),
         }
     }
 }
 
 impl Grid {
+    pub fn set_x_offset(&mut self, x_offset: position::Position) {
+        self.x_offset = x_offset; 
+    }
+
+    pub fn set_y_offset(&mut self, y_offset: position::Position) {
+        self.y_offset = y_offset; 
+    }
+
     pub fn new(width: f32, height: f32, x_cells: i32, y_cells: i32, gap: f32) -> Self {
         const WIDTH: i32 = 10;
         const HEIGHT: i32 = 10;
@@ -60,7 +72,9 @@ impl Grid {
             // ignore the HORRID line below this comment
             // it just makes a 2D list of cell::default's
             // there are HEIGHT inner lists and they all have WIDTH elements
-            cells: (0..HEIGHT).into_iter().map(|_| (0..WIDTH).into_iter().map(|_| cell::Cell::default()).collect::<Vec<_>>()).collect()
+            cells: (0..HEIGHT).into_iter().map(|_| (0..WIDTH).into_iter().map(|_| cell::Cell::default()).collect::<Vec<_>>()).collect(),
+            x_offset: position::Position::default(),
+            y_offset: position::Position::default(),
         }
     }
 
@@ -78,14 +92,16 @@ impl Grid {
 
     pub fn draw(&self) {
         // draw background (the gap color)
-        draw_rectangle(0.0, 0.0, self.width, self.height, self.gap_color);
+        let x_offset = self.x_offset.as_pixels(self.width, screen_width());
+        let y_offset = self.y_offset.as_pixels(self.height, screen_height());
+        draw_rectangle(x_offset, y_offset, self.width, self.height, self.gap_color);
 
         // draw cells
         let (cell_width, cell_height) = self.calculate_dimensions();
 
         for i in 0..self.height_cells {
             for j in 0..self.width_cells {
-                self.draw_cell(i, j, cell_width, cell_height);
+                self.draw_cell(i, j, cell_width, cell_height, x_offset, y_offset);
             }
         }
     }
@@ -96,10 +112,10 @@ impl Grid {
     // this function calculates the cells position (takes gap into account)
     // it also handles any special coloring that might need to happen
     // it also prints any text to the screen (if applicable)
-    fn draw_cell(&self, row: i32, col: i32, cell_width: f32, cell_height: f32) {
+    fn draw_cell(&self, row: i32, col: i32, cell_width: f32, cell_height: f32, x_offset: f32, y_offset: f32) {
         // cell cords
-        let x_pos = self.gap + col as f32 * (cell_width + self.gap as f32);
-        let y_pos = self.gap + row as f32 * (cell_height + self.gap as f32);
+        let x_pos = x_offset + self.gap + col as f32 * (cell_width + self.gap as f32);
+        let y_pos = y_offset + self.gap + row as f32 * (cell_height + self.gap as f32);
 
         // cell color
         let mut color = self.bg_color;

@@ -8,8 +8,9 @@
 // this enum and all of its functions assume that, when drawing something,
 // the (x, y) pair provided represents the top left corner of the thing being drawn
 // (similar to the draw_rect function and unlike the draw_text function)
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Default)]
 pub enum Position {
+    #[default]
     Start, // left or top
     End, // right or bottom
     Center, // middle (either way)
