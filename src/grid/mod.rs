@@ -1,6 +1,7 @@
 use macroquad::prelude::*;
 
 mod cell;
+mod position;
 
 pub struct Grid {
     width: f32,  // width of the grid in pixels
