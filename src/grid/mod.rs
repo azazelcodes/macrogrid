@@ -116,8 +116,7 @@ impl Grid {
 
         // draw the text if this cell has any
         if let Some(text) = &self.cells[row as usize][col as usize].value {
-            // this is in the wrong position
-            draw_text(text, x_pos, y_pos, 90.0, BLACK);
+            draw_text(text, x_pos, y_pos + cell_height, cell_height, BLACK);
         }
     }
 
