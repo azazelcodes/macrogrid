@@ -5,6 +5,30 @@ mod position;
 
 pub use position::Position;
 
+/// # the point of this crate!
+/// used to represent and draw a grid to the screen
+///
+/// ## construction
+/// use the new method or the default method
+///
+/// ## notes
+///
+/// only has private feilds so you interface with it via
+/// methods (mainly getters and setters)
+///
+/// ## stuff you can do
+/// 
+/// - creating a grid
+/// - selecting a cell
+/// - changing selected cells color
+/// - changing default cell bg color
+/// - changing gap color
+/// - changing grids postion with Position enum
+/// - setting color of a specific cell
+/// - writing text to a specific cell
+/// - writing text to the selected cell
+/// - getting the selected cell's index
+/// - drawing the grid
 pub struct Grid {
     width: f32,                   // width of the grid in pixels
     height: f32,                  // height of the grid in pixels
@@ -58,14 +82,24 @@ impl Default for Grid {
 }
 
 impl Grid {
+    /// position the grid somewhere on the screen
     pub fn set_x_offset(&mut self, x_offset: position::Position) {
         self.x_offset = x_offset;
     }
 
+    /// position the grid somewhere on the screen
     pub fn set_y_offset(&mut self, y_offset: position::Position) {
         self.y_offset = y_offset;
     }
 
+    /// # create a grid
+    ///
+    /// ## problems
+    ///
+    /// there are a shit ton of feilds and I wanted the new function 
+    /// to not have a trillion args.
+    /// It is "normal" (more like intended) to create a new Grid and then call a bunch of setters to customize it 
+    /// to your liking
     pub fn new(width: f32, height: f32, x_cells: usize, y_cells: usize, gap: f32) -> Self {
         const WIDTH: i32 = 10;
         const HEIGHT: i32 = 10;
@@ -108,6 +142,10 @@ impl Grid {
         (cell_width, cell_height)
     }
 
+    /// # draw it!
+    /// this does not change any state
+    /// your gonna want to put this in the main
+    /// loop or something like that
     pub fn draw(&self) {
         // draw background (the gap color)
         let x_offset = position::as_pixels(self.x_offset, self.width, screen_width());
@@ -176,30 +214,58 @@ impl Grid {
         }
     }
 
+    /// # select a cell
+    ///
+    /// ## warning
+    /// if the selected cell is out of bounds
+    /// it might lead to a panic later
     pub fn select_cell(&mut self, cell_index: Option<(usize, usize)>) {
         self.selected_cell = cell_index;
     }
 
+    /// returns the (row, col) index of the selected cell
     pub fn get_selected_cell_index(&self) -> Option<(usize, usize)> {
         self.selected_cell
     }
 
+    /// changes the default bg color of the given cell
+    ///
+    /// ## panics
+    /// if the row or col is out of bounds indexing into the 2D vector
+    /// which represents the grid (its private u can't see it)
     pub fn color_cell(&mut self, row: usize, col: usize, color: macroquad::color::Color) {
         self.cells[row][col].color = Some(color);
     }
 
+    /// # sets default bg color for all cells
+    ///
+    /// different from color_cell becuase this one applies to all
+    /// uncolored and unselected cells
+    /// this function panics
     pub fn set_cell_bg_color(&mut self, color: macroquad::color::Color) {
         self.cell_bg_color = color;
     }
 
+    /// color the gap between cells
     pub fn set_gap_color(&mut self, color: macroquad::color::Color) {
         self.gap_color = color;
     }
 
+    /// when selected, a cell will have this color
     pub fn set_selected_cell_color(&mut self, color: macroquad::color::Color) {
         self.selected_color = Some(color);
     }
 
+    /// # write text to a cell
+    ///
+    /// ## panics
+    /// if row and col are out of bounds
+    ///
+    /// ## generic option
+    /// so the text arg is the text to be written
+    /// - if the Option is None, there will be no text
+    /// - if the Option is Some(text), I call text.to_string()
+    /// and then write the resulting String to the screen
     pub fn set_cell_text<T>(&mut self, row: usize, col: usize, text: Option<T>)
     where
         T: ToString,
@@ -210,6 +276,19 @@ impl Grid {
         self.cells[row][col].text = t;
     }
 
+    /// same as set_cell_text
+    /// but instead of providing a row and col
+    /// it just writes the text onto the selected cell
+    ///
+    /// ## no selected cell
+    ///
+    /// if there is no selected cell, this
+    /// method does nothing
+    ///
+    /// ## panics 
+    ///
+    /// if the selected cell happens to be out of bounds, 
+    /// this function panics
     pub fn set_selected_cell_text<T>(&mut self, text: Option<T>)
     where
         T: ToString,
