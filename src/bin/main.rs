@@ -9,11 +9,11 @@ async fn main() {
     let mut g = Grid::new(500.0, 500.0, 6, 6, 5.0);
     //let g = Grid::default()
 
-    g.select(1, 1);
+    g.select_cell(1, 1);
 
     g.color_cell(2, 2, YELLOW);
 
-    g.cells[3][3].value = Some(String::from("hi"));
+    g.set_cell_text(3, 3, Some("hi"));
     loop {
         clear_background(GREEN);
 

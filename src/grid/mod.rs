@@ -17,7 +17,7 @@ pub struct Grid {
     gap_color: macroquad::color::Color,
 
     // is a vec really needed here? how use const bro
-    pub cells: Vec<Vec<cell::Cell>>,
+    cells: Vec<Vec<cell::Cell>>,
 
     selected_cell: Option<(i32, i32)>, // selected cell (if needed)
     selected_color: Option<macroquad::color::Color>,
@@ -151,7 +151,6 @@ impl Grid {
                     .expect("there was a selected cell but no selected color");
             }
         }
-
         // and if it had a preset color then use that
         else if let Some(set_color) = self.cells[row as usize][col as usize].color {
             // somehow we never reach this??
@@ -162,7 +161,7 @@ impl Grid {
         draw_rectangle(x_pos, y_pos, cell_width, cell_height, color);
 
         // draw the text if this cell has any
-        if let Some(text) = &self.cells[row as usize][col as usize].value {
+        if let Some(text) = &self.cells[row as usize][col as usize].text {
             // shifted because read the readme
             let y_pos = y_pos + cell_height;
 
@@ -175,11 +174,21 @@ impl Grid {
         }
     }
 
-    pub fn select(&mut self, row: i32, col: i32) {
+    pub fn select_cell(&mut self, row: i32, col: i32) {
         self.selected_cell = Some((row, col))
     }
 
     pub fn color_cell(&mut self, row: i32, col: i32, color: macroquad::color::Color) {
         self.cells[row as usize][col as usize].color = Some(color);
+    }
+
+    pub fn set_cell_text<T>(&mut self, row: i32, col: i32, text: Option<T>)
+    where
+        T: ToString,
+    {
+        // map value to string
+        let t = text.map(|val| val.to_string());
+        // set value
+        self.cells[row as usize][col as usize].text = t;
     }
 }
