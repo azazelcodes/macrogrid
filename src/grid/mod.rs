@@ -11,7 +11,7 @@ pub struct Grid {
 
     width_cells: usize,                  // number of cells
     height_cells: usize,                 // number of cells
-    bg_color: macroquad::color::Color, // color of the cells
+    cell_bg_color: macroquad::color::Color, // color of the cells
 
     gap: f32, // space between cells (in pixels)
     gap_color: macroquad::color::Color,
@@ -32,7 +32,7 @@ impl Default for Grid {
             height: screen_height(),
             width_cells: WIDTH,
             height_cells: HEIGHT,
-            bg_color: RED,
+            cell_bg_color: RED,
             gap: 3.0,
             gap_color: PINK,
             selected_cell: None,
@@ -72,7 +72,7 @@ impl Grid {
             height,
             width_cells: x_cells,
             height_cells: y_cells,
-            bg_color: RED,
+            cell_bg_color: RED,
             gap,
             gap_color: BLACK,
             selected_cell: None,
@@ -142,7 +142,7 @@ impl Grid {
         let y_pos = y_offset + self.gap + row as f32 * (cell_height + self.gap as f32);
 
         // cell color
-        let mut color = self.bg_color;
+        let mut color = self.cell_bg_color;
         // if this is the selected_cell, use the other color
         if let Some((selected_row, selected_col)) = self.selected_cell {
             if selected_row == row && selected_col == col {
@@ -180,6 +180,18 @@ impl Grid {
 
     pub fn color_cell(&mut self, row: usize, col: usize, color: macroquad::color::Color) {
         self.cells[row][col].color = Some(color);
+    }
+
+    pub fn set_cell_bg_color(&mut self, color: macroquad::color::Color) {
+        self.cell_bg_color = color;
+    }
+
+    pub fn set_gap_color(&mut self, color: macroquad::color::Color) {
+        self.gap_color = color;
+    }
+
+    pub fn set_selected_cell(&mut self, color: macroquad::color::Color) {
+        self.selected_color = Some(color);
     }
 
     pub fn set_cell_text<T>(&mut self, row: usize, col: usize, text: Option<T>)
