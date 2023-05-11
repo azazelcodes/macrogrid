@@ -9,8 +9,8 @@ pub struct Grid {
     x_offset: position::Position, // for positioning the grid on the screen
     y_offset: position::Position, // for positioning the grid on the screen
 
-    width_cells: i32,                  // number of cells
-    height_cells: i32,                 // number of cells
+    width_cells: usize,                  // number of cells
+    height_cells: usize,                 // number of cells
     bg_color: macroquad::color::Color, // color of the cells
 
     gap: f32, // space between cells (in pixels)
@@ -19,14 +19,14 @@ pub struct Grid {
     // is a vec really needed here? how use const bro
     cells: Vec<Vec<cell::Cell>>,
 
-    selected_cell: Option<(i32, i32)>, // selected cell (if needed)
+    selected_cell: Option<(usize, usize)>, // selected cell (if needed)
     selected_color: Option<macroquad::color::Color>,
 }
 
 impl Default for Grid {
     fn default() -> Self {
-        const WIDTH: i32 = 10;
-        const HEIGHT: i32 = 10;
+        const WIDTH: usize = 10;
+        const HEIGHT: usize = 10;
         Grid {
             width: screen_width(),
             height: screen_height(),
@@ -64,7 +64,7 @@ impl Grid {
         self.y_offset = y_offset;
     }
 
-    pub fn new(width: f32, height: f32, x_cells: i32, y_cells: i32, gap: f32) -> Self {
+    pub fn new(width: f32, height: f32, x_cells: usize, y_cells: usize, gap: f32) -> Self {
         const WIDTH: i32 = 10;
         const HEIGHT: i32 = 10;
         Grid {
@@ -130,8 +130,8 @@ impl Grid {
     // it also prints any text to the screen (if applicable)
     fn draw_cell(
         &self,
-        row: i32,
-        col: i32,
+        row: usize,
+        col: usize,
         cell_width: f32,
         cell_height: f32,
         x_offset: f32,
@@ -152,7 +152,7 @@ impl Grid {
             }
         }
         // and if it had a preset color then use that
-        else if let Some(set_color) = self.cells[row as usize][col as usize].color {
+        else if let Some(set_color) = self.cells[row][col].color {
             // somehow we never reach this??
             color = set_color;
         }
@@ -161,7 +161,7 @@ impl Grid {
         draw_rectangle(x_pos, y_pos, cell_width, cell_height, color);
 
         // draw the text if this cell has any
-        if let Some(text) = &self.cells[row as usize][col as usize].text {
+        if let Some(text) = &self.cells[row][col].text {
             // shifted because read the readme
             let y_pos = y_pos + cell_height;
 
@@ -174,21 +174,21 @@ impl Grid {
         }
     }
 
-    pub fn select_cell(&mut self, row: i32, col: i32) {
+    pub fn select_cell(&mut self, row: usize, col: usize) {
         self.selected_cell = Some((row, col))
     }
 
-    pub fn color_cell(&mut self, row: i32, col: i32, color: macroquad::color::Color) {
-        self.cells[row as usize][col as usize].color = Some(color);
+    pub fn color_cell(&mut self, row: usize, col: usize, color: macroquad::color::Color) {
+        self.cells[row][col].color = Some(color);
     }
 
-    pub fn set_cell_text<T>(&mut self, row: i32, col: i32, text: Option<T>)
+    pub fn set_cell_text<T>(&mut self, row: usize, col: usize, text: Option<T>)
     where
         T: ToString,
     {
         // map value to string
         let t = text.map(|val| val.to_string());
         // set value
-        self.cells[row as usize][col as usize].text = t;
+        self.cells[row][col].text = t;
     }
 }

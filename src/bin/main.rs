@@ -2,8 +2,6 @@ use macroquad::prelude::*;
 
 use macroquad_grid::grid::Grid;
 
-// TODO i32 when should be usize
-
 #[macroquad::main("BasicShapes")]
 async fn main() {
     let mut g = Grid::new(500.0, 500.0, 6, 6, 5.0);
