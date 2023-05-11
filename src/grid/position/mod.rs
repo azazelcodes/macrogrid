@@ -17,15 +17,12 @@ pub enum Position {
     Pixels(f32) // + means right or down and - means left or up
 }
 
-impl Position {
-    // TODO is there a non ass way to make this type aware that it is either x or y?
-    pub fn as_pixels(&self, width_or_height_of_thing: f32, width_or_height_of_screen: f32) -> f32 {
-        match self {
-            Position::Start => 0.0,
-            Position::End => width_or_height_of_screen - width_or_height_of_thing,
-            Position::Center => (width_or_height_of_screen - width_or_height_of_thing)/2.0,
-            Position::Pixels(offset) => *offset,
-        }
+pub fn as_pixels(position: Position, width_or_height_of_thing: f32, width_or_height_of_screen: f32) -> f32 {
+    match position {
+        Position::Start => 0.0,
+        Position::End => width_or_height_of_screen - width_or_height_of_thing,
+        Position::Center => (width_or_height_of_screen - width_or_height_of_thing)/2.0,
+        Position::Pixels(offset) => offset,
     }
 }
 

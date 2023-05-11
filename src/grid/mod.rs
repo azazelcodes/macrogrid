@@ -108,8 +108,8 @@ impl Grid {
 
     pub fn draw(&self) {
         // draw background (the gap color)
-        let x_offset = self.x_offset.as_pixels(self.width, screen_width());
-        let y_offset = self.y_offset.as_pixels(self.height, screen_height());
+        let x_offset = position::as_pixels(self.x_offset, self.width, screen_width());
+        let y_offset = position::as_pixels(self.y_offset, self.height, screen_height());
         draw_rectangle(x_offset, y_offset, self.width, self.height, self.gap_color);
 
         // draw cells
