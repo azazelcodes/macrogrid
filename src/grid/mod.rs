@@ -178,6 +178,10 @@ impl Grid {
         self.selected_cell = Some((row, col))
     }
 
+    pub fn get_selected_cell_index(&self) -> Option<(usize, usize)> {
+        self.selected_cell
+    }
+
     pub fn color_cell(&mut self, row: usize, col: usize, color: macroquad::color::Color) {
         self.cells[row][col].color = Some(color);
     }
