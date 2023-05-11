@@ -3,14 +3,16 @@ use macroquad::prelude::*;
 mod cell;
 mod position;
 
+pub use position::Position;
+
 pub struct Grid {
     width: f32,                   // width of the grid in pixels
     height: f32,                  // height of the grid in pixels
     x_offset: position::Position, // for positioning the grid on the screen
     y_offset: position::Position, // for positioning the grid on the screen
 
-    width_cells: usize,                  // number of cells
-    height_cells: usize,                 // number of cells
+    width_cells: usize,                     // number of cells
+    height_cells: usize,                    // number of cells
     cell_bg_color: macroquad::color::Color, // color of the cells
 
     gap: f32, // space between cells (in pixels)
@@ -174,8 +176,8 @@ impl Grid {
         }
     }
 
-    pub fn select_cell(&mut self, row: usize, col: usize) {
-        self.selected_cell = Some((row, col))
+    pub fn select_cell(&mut self, cell_index: Option<(usize, usize)>) {
+        self.selected_cell = cell_index;
     }
 
     pub fn get_selected_cell_index(&self) -> Option<(usize, usize)> {
@@ -194,7 +196,7 @@ impl Grid {
         self.gap_color = color;
     }
 
-    pub fn set_selected_cell(&mut self, color: macroquad::color::Color) {
+    pub fn set_selected_cell_color(&mut self, color: macroquad::color::Color) {
         self.selected_color = Some(color);
     }
 
@@ -206,5 +208,15 @@ impl Grid {
         let t = text.map(|val| val.to_string());
         // set value
         self.cells[row][col].text = t;
+    }
+
+    pub fn set_selected_cell_text<T>(&mut self, text: Option<T>)
+    where
+        T: ToString,
+    {
+        // only do something if there is a selected cell
+        if let Some( (row, col) ) = self.get_selected_cell_index() {
+            self.set_cell_text(row, col, text);
+        }
     }
 }

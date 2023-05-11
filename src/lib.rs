@@ -1,6 +1,9 @@
 // TODO padding, write text
 
-pub mod grid;
+mod grid;
+
+pub use grid::Grid;
+pub use grid::Position;
 
 #[cfg(test)]
 mod tests {
