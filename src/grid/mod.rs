@@ -7,6 +7,7 @@ pub use position::Position;
 
 /// # the point of this crate!
 /// used to represent and draw a grid to the screen
+/// heres the repo: https://github.com/TheDinner22/macroquad_grid
 ///
 /// ## construction
 /// use the new method or the default method

@@ -1,6 +1,8 @@
 # real readme coming soon
 
-rn it's just here for notes and shit
+feel like I put a lot of time into writing some good old doc comments
+so why don't you read those instead:
+
 
 ## NOTES
 
