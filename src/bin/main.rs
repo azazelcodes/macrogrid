@@ -2,6 +2,19 @@ use macroquad::prelude::*;
 
 use macroquad_grid::grid::Grid;
 
+// shows off
+// - drawing the grid
+// - selecting a cell
+// - changing selected cells color
+// - changing default cell bg color
+// - changing gap color
+// - changing grids postion with Position enum
+// - setting color of a specific cell
+// - writing text to a cell
+// - 
+// -
+// -
+
 #[macroquad::main("BasicShapes")]
 async fn main() {
     let mut g = Grid::new(500.0, 500.0, 6, 6, 5.0);
