@@ -1,12 +1,13 @@
 [package]
-name = "macroquad_grid"
-version = "0.1.1"
+name = "macrogrid"
+version = "0.1.0"
 edition = "2021"
 exclude = [
     "examples/*",
+    "src/Olib.rs",
 ]
 license = "MIT OR Apache-2.0"
-description = "grid to use with macroquad"
+description = "Simple crate to work with grids in macroquad."
 homepage = "https://github.com/TheDinner22/macroquad_grid"
 repository = "https://github.com/TheDinner22/macroquad_grid"
 readme = "README.md"
@@ -15,5 +16,5 @@ documentation = "https://docs.rs/macroquad_grid/0.1.0"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-macroquad = "0.3.25"
+macroquad = "0.4.13"
 
