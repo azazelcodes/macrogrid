@@ -8,10 +8,10 @@ exclude = [
 ]
 license = "MIT OR Apache-2.0"
 description = "Simple crate to work with grids in macroquad."
-homepage = "https://github.com/TheDinner22/macroquad_grid"
-repository = "https://github.com/TheDinner22/macroquad_grid"
+homepage = "https://github.com/azazelcodes/macrogrid"
+repository = "https://github.com/azazelcodes/macrogrid"
 readme = "README.md"
-documentation = "https://docs.rs/macroquad_grid/0.1.0"
+documentation = "https://docs.rs/macrogrid/0.1.0"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
