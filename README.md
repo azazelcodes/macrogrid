@@ -1,6 +1,9 @@
 <div align="center">
   
-<div><img src="https://github.com/user-attachments/assets/8d5d8178-e2ef-457a-92a2-decd0e9bac50" width="64px" /><h2> macrogrid </h2></div>
+<div style="display: flex; align-items: center; gap: 8px;">
+<img src="https://github.com/user-attachments/assets/8d5d8178-e2ef-457a-92a2-decd0e9bac50" width="64px" />
+<h2>macrogrid</h2>
+</div>
 
 <sub><sup>quads ftw!!</sup></sub>
 
