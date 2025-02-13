@@ -2,7 +2,7 @@
   
 <h2>
 <img src="https://github.com/user-attachments/assets/8d5d8178-e2ef-457a-92a2-decd0e9bac50" width="64px" />
-<p >macrogrid </p>
+<span>macrogrid </span>
 </h2>
 
 <sub><sup>quads ftw!!</sup></sub>
