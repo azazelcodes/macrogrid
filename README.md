@@ -1,8 +1,16 @@
-# real readme coming soon
+<div align="center">
+  
+<div><img src="https://github.com/user-attachments/assets/8d5d8178-e2ef-457a-92a2-decd0e9bac50" width="500px" /><h2> macrogrid </h2></div>
 
-feel like I put a lot of time into writing some good old doc comments
-so why don't you read those instead:
+<sub><sup>quads ftw!!</sup></sub>
 
+[![GitHub release](https://img.shields.io/github/v/release/azazelcodes/mcbullet?color=blue&label=release)]()
+[![GitHub issues](https://img.shields.io/github/issues/azazelcodes/mcbullet?color=red)]()
+[![GitHub stars](https://img.shields.io/github/stars/azazelcodes/mcbullet)]()
+![Crates.io Downloads (recent)](https://img.shields.io/crates/dr/macrogrid?logo=rust)
+
+Docs included in the code. Sorry!
+</div>
 
 ## NOTES
 
