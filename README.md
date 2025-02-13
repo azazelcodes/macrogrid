@@ -7,7 +7,6 @@
 
 <sub><sup>quads ftw!!</sup></sub>
 
-[![GitHub release](https://img.shields.io/github/v/release/azazelcodes/mcbullet?color=blue&label=release)]()
 [![GitHub issues](https://img.shields.io/github/issues/azazelcodes/mcbullet?color=red)]()
 [![GitHub stars](https://img.shields.io/github/stars/azazelcodes/mcbullet)]()
 ![Crates.io Downloads (recent)](https://img.shields.io/crates/dr/macrogrid?logo=rust)
