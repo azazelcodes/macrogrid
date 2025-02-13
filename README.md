@@ -1,6 +1,6 @@
 <div align="center">
   
-<h2 style="vertical-align: middle;">
+<h2 style="vertical-align: middle; text-align:center;">
 <img src="https://github.com/user-attachments/assets/8d5d8178-e2ef-457a-92a2-decd0e9bac50" width="64px"/>
 <span> macrogrid </span>
 </h2>
