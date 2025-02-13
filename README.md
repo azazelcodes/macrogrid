@@ -1,8 +1,8 @@
 <div align="center">
   
-<h2 style="display: flex; align-items: center; gap: 8px; margin: 0;">
-<img src="https://github.com/user-attachments/assets/8d5d8178-e2ef-457a-92a2-decd0e9bac50" width="64px" />
-<span> macrogrid </span>
+<h2 style="display: flex; align-items: center; gap: 8px; font-size: 32px; margin: 0;">
+  <img src="https://github.com/user-attachments/assets/8d5d8178-e2ef-457a-92a2-decd0e9bac50" style="width: 40px; height: 40px;" />
+  <span> macrogrid </span>
 </h2>
 
 <sub><sup>quads ftw!!</sup></sub>
