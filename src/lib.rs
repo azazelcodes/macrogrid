@@ -1,9 +1,12 @@
 use macroquad::prelude::*;
 
-mod cell;
+mod types;
 mod position;
 
 pub use position::Position;
+
+use types::{hexagon, square, Cell};
+pub use types::GridType;
 
 /// # the point of this crate!
 /// used to represent and draw a grid to the screen
@@ -31,20 +34,22 @@ pub use position::Position;
 /// - getting the selected cell's index
 /// - drawing the grid
 pub struct Grid {
+    gtype: GridType,
+
     width: f32,                   // width of the grid in pixels
     height: f32,                  // height of the grid in pixels
     x_offset: position::Position, // for positioning the grid on the screen
     y_offset: position::Position, // for positioning the grid on the screen
 
-    width_cells: usize,                     // number of cells
-    height_cells: usize,                    // number of cells
+    width_cells: usize,                     // number of cells (x)
+    height_cells: usize,                    // number of cells (y)
     cell_bg_color: macroquad::color::Color, // color of the cells
 
-    gap: f32, // space between cells (in pixels)
-    gap_color: macroquad::color::Color,
+    gap: f32,                           // space between cells (in pixels)
+    gap_color: macroquad::color::Color, // gap fill  color
 
-    // is a vec really needed here? how use const bro
-    cells: Vec<Vec<cell::Cell>>,
+    // is a vec really needed here? how use const bro; yeah man idk either :P
+    cells: Vec<Vec<Cell>>,
 
     selected_cell: Option<(usize, usize)>, // selected cell (if needed)
     selected_color: Option<macroquad::color::Color>,
@@ -55,6 +60,7 @@ impl Default for Grid {
         const WIDTH: usize = 10;
         const HEIGHT: usize = 10;
         Grid {
+            gtype: GridType::SQUARE,
             width: screen_width(),
             height: screen_height(),
             width_cells: WIDTH,
@@ -72,7 +78,7 @@ impl Default for Grid {
                 .map(|_| {
                     (0..WIDTH)
                         .into_iter()
-                        .map(|_| cell::Cell::default())
+                        .map(|_| Cell::default())
                         .collect::<Vec<_>>()
                 })
                 .collect(),
@@ -101,10 +107,9 @@ impl Grid {
     /// to not have a trillion args.
     /// It is "normal" (more like intended) to create a new Grid and then call a bunch of setters to customize it 
     /// to your liking
-    pub fn new(width: f32, height: f32, x_cells: usize, y_cells: usize, gap: f32) -> Self {
-        const WIDTH: i32 = 10;
-        const HEIGHT: i32 = 10;
+    pub fn new(gtype: GridType, width: f32, height: f32, x_cells: usize, y_cells: usize, gap: f32) -> Self {
         Grid {
+            gtype,
             width,
             height,
             width_cells: x_cells,
@@ -117,12 +122,12 @@ impl Grid {
             // ignore the HORRID line below this comment
             // it just makes a 2D list of cell::default's
             // there are HEIGHT inner lists and they all have WIDTH elements
-            cells: (0..HEIGHT)
+            cells: (0..y_cells)
                 .into_iter()
                 .map(|_| {
-                    (0..WIDTH)
+                    (0..x_cells)
                         .into_iter()
-                        .map(|_| cell::Cell::default())
+                        .map(|_| Cell::default())
                         .collect::<Vec<_>>()
                 })
                 .collect(),
@@ -148,70 +153,41 @@ impl Grid {
     /// your gonna want to put this in the main
     /// loop or something like that
     pub fn draw(&self) {
-        // draw background (the gap color)
         let x_offset = position::as_pixels(self.x_offset, self.width, screen_width());
         let y_offset = position::as_pixels(self.y_offset, self.height, screen_height());
-        draw_rectangle(x_offset, y_offset, self.width, self.height, self.gap_color);
-
-        // draw cells
-        let (cell_width, cell_height) = self.calculate_dimensions();
-
-        for i in 0..self.height_cells {
-            for j in 0..self.width_cells {
-                self.draw_cell(i, j, cell_width, cell_height, x_offset, y_offset);
-            }
-        }
-    }
-
-    // only called from the double for loop in the draw function
-    // this way it does not look crouded as fuck
-    //
-    // this function calculates the cells position (takes gap into account)
-    // it also handles any special coloring that might need to happen
-    // it also prints any text to the screen (if applicable)
-    fn draw_cell(
-        &self,
-        row: usize,
-        col: usize,
-        cell_width: f32,
-        cell_height: f32,
-        x_offset: f32,
-        y_offset: f32,
-    ) {
-        // cell cords
-        let x_pos = x_offset + self.gap + col as f32 * (cell_width + self.gap as f32);
-        let y_pos = y_offset + self.gap + row as f32 * (cell_height + self.gap as f32);
-
-        // cell color
-        let mut color = self.cell_bg_color;
-        // if this is the selected_cell, use the other color
-        if let Some((selected_row, selected_col)) = self.selected_cell {
-            if selected_row == row && selected_col == col {
-                color = self
-                    .selected_color
-                    .expect("there was a selected cell but no selected color");
-            }
-        }
-        // and if it had a preset color then use that
-        else if let Some(set_color) = self.cells[row][col].color {
-            // somehow we never reach this??
-            color = set_color;
-        }
-
-        // draw it!
-        draw_rectangle(x_pos, y_pos, cell_width, cell_height, color);
-
-        // draw the text if this cell has any
-        if let Some(text) = &self.cells[row][col].text {
-            // shifted because read the readme
-            let y_pos = y_pos + cell_height;
-
-            // center the text or something idk
-            let text_dim = macroquad::text::measure_text(text, None, cell_height as u16, 1.0); // 1.0 is default
-            let centered_x = (cell_width - text_dim.width) / 2.0 + x_pos;
-            let centered_y = y_pos - (cell_height - text_dim.height) / 2.0;
-
-            draw_text(text, centered_x, centered_y, cell_height, BLACK);
+        match self.gtype {
+            GridType::SQUARE => {
+                // draw background (the gap color)
+                draw_rectangle(x_offset, y_offset, self.width, self.height, self.gap_color);
+                // draw cells
+                let (cell_width, cell_height) = self.calculate_dimensions();
+        
+                for i in 0..self.height_cells {
+                    for j in 0..self.width_cells {
+                        square::draw_cell(self, i, j, cell_width, cell_height, x_offset, y_offset);
+                    }
+                }        
+            },
+            GridType::HEXAGONF => {
+                // draw cells
+                let (cell_width, _cell_height) = self.calculate_dimensions();
+        
+                for i in 0..self.height_cells {
+                    for j in 0..self.width_cells {
+                        hexagon::draw_cell(self, i, j, cell_width, x_offset, y_offset, false);
+                    }
+                }   
+            },
+            GridType::HEXAGONP => {
+                // draw cells
+                let (cell_width, _cell_height) = self.calculate_dimensions();
+        
+                for i in 0..self.height_cells {
+                    for j in 0..self.width_cells {
+                        hexagon::draw_cell(self, i, j, cell_width, x_offset, y_offset, true);
+                    }
+                }   
+            },
         }
     }
 

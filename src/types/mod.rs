@@ -1,3 +1,6 @@
+pub mod square;
+pub mod hexagon;
+
 // so a grid is composed of cells?
 // this is becuase if we want to write to the grid
 // it would be nice if it remembered what it was doing
@@ -7,5 +10,15 @@
 pub struct Cell {
     pub color: Option<macroquad::color::Color>,
     pub text: Option<String>,
-    pub text_color: Option<macroquad::color::Color>
+    pub text_color: Option<macroquad::color::Color>,
+}
+
+pub enum GridType {
+    SQUARE,
+    HEXAGONF,
+    HEXAGONP,
+}
+
+impl GridType {
+    
 }
