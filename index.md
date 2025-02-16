@@ -1,8 +1,13 @@
 ---
 order: 1000
 icon: rel-file-path
+label: Index
 ---
 
-This is based on [:icon-tab-external: macroquad_grid](https://github.com/TheDinner22/macroquad_grid){target="_blank"}.
+# macrogrid
+
+This crate is based on [:icon-tab-external: macroquad_grid](https://github.com/TheDinner22/macroquad_grid){target="_blank"}.\
 Documentation currently only as comments in the code.
-All pages listed here are highly experimental!
+!!!warning 
+All pages listed here are incomplete and (probably) rarely updated!
+!!!
