@@ -9,7 +9,7 @@ branding:
     label:
       text: "#000000"
       background: "#C40A09"
-  favicon: static/logo.png
+  favicon: static/favicon.ico
 links:
 - text: Getting Started
   link: https://retype.com/guides/getting-started/
