@@ -2,10 +2,16 @@ input: .
 output: .retype
 url: https://azazelcodes.github.io/macrogrid/
 branding:
-  title: Project Name
-  label: Docs
+  title: macrogrid
+  label: v0.1.1
+  logo: static/logo.png
+  colors:
+    label:
+      text: "#000000"
+      background: "#C40A09"
+  favicon: static/logo.png
 links:
 - text: Getting Started
   link: https://retype.com/guides/getting-started/
 footer:
-  copyright: "&copy; Copyright {{ year }}. All rights reserved."
+  #copyright: "&copy; Copyright {{ year }}. All rights reserved."
