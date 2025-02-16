@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - master
+      - retype
 
 jobs:
   publish:
@@ -25,4 +25,5 @@ jobs:
 
       - uses: retypeapp/action-github-pages@latest
         with:
+          url: https://azazelcodes.github.io/macrogrid/
           update-branch: true
