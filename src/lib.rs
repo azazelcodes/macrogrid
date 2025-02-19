@@ -5,6 +5,7 @@ mod position;
 
 pub use position::Position;
 
+use types::hexagon::unifunc;
 pub use types::{GridType, hexagon, square, Cell};
 
 /// # the point of this crate!
@@ -154,13 +155,13 @@ impl Grid {
     pub fn draw(&self) {
         let x_offset = position::as_pixels(self.x_offset, self.width, screen_width());
         let y_offset = position::as_pixels(self.y_offset, self.height, screen_height());
+        
+        let (cell_width, cell_height) = self.calculate_dimensions();
         match self.gtype {
             GridType::SQUARE => {
                 // draw background (the gap color)
                 draw_rectangle(x_offset, y_offset, self.width, self.height, self.gap_color);
                 // draw cells
-                let (cell_width, cell_height) = self.calculate_dimensions();
-        
                 for i in 0..self.height_cells {
                     for j in 0..self.width_cells {
                         square::draw_cell(self, i, j, cell_width, cell_height, x_offset, y_offset);
@@ -169,13 +170,63 @@ impl Grid {
             },
             GridType::HEXAGONF | GridType::HEXAGONP => {
                 // draw cells
-                let (cell_width, _cell_height) = self.calculate_dimensions();
-        
                 for i in 0..self.height_cells {
                     for j in 0..self.width_cells {
                         hexagon::draw_cell(self, i, j, cell_width, x_offset, y_offset);
                     }
                 }   
+            },
+        }
+    }
+
+    pub fn from_pixel(&self, (x, y): (f32, f32)) -> (i32, i32) {
+        let x_offset = position::as_pixels(self.x_offset, self.width, screen_width());
+        let y_offset = position::as_pixels(self.y_offset, self.height, screen_height());
+        
+        let (cell_width, cell_height) = self.calculate_dimensions();
+        match self.get_type() {
+            GridType::SQUARE => {
+                // UNTESTED code that came to me in my break and I think it should work
+                let row = (x - x_offset) / (cell_width + self.gap);
+                let col = (y - y_offset) / (cell_height + self.gap);
+                (row as i32, col as i32)
+            },
+            GridType::HEXAGONF => {
+                let (cell_width, cell_height) = (2.0 * cell_width, 3.0_f32.sqrt() * cell_width);
+                let (x_scale, y_scale) = (3.0 / 4.0, 1.0);
+
+                // matching the hexagon layout for flat from the code below for pointy
+                let col = ((x - x_offset - self.gap + 0.0) / (x_scale * cell_width)).round() as i32;
+
+                // ODD-Q
+                let y_adjust = if col % 2 == 0 {
+                    0.5 * cell_height
+                } else {
+                    0.0
+                };
+
+                let row = ((y - y_offset - y_adjust) / (y_scale * cell_height)).round() as i32;
+
+                (row, col)
+            },
+            GridType::HEXAGONP => {
+                let (cell_width, cell_height) = (3.0_f32.sqrt() * cell_width, 2.0 * cell_width);
+                let (x_scale, y_scale) = (1.0, 3.0 / 4.0);
+
+                // THIS IS CHATGPT MATH SOLVING FOR ROW AND COL FROM HEXAGON DRAW CODE, im sorry :/
+                let row = ((y - y_offset - 0.0) / (y_scale * cell_height)).round() as i32;
+
+                // ODD-R
+                let x_adjust = if row % 2 == 0 {
+                    0.5 * cell_width
+                } else {
+                    0.0
+                };
+
+                let col = ((x - x_offset - self.gap + x_adjust) / (x_scale * cell_width)).round() as i32;
+                // CHATGPT MATH END!!
+
+                (row, col)
             },
         }
     }
