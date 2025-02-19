@@ -42,6 +42,12 @@ async fn main() {
         // draws the grid
         g.draw();
 
+        // listens for a lc and selects the hovered cell (h)
+        if is_mouse_button_down(MouseButton::Left) {
+            let h = g.from_pixel(mouse_position());
+            g.select_cell(Some((h.0 as usize, h.1 as usize)));
+        };
+
         next_frame().await
     }
 }

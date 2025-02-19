@@ -5,7 +5,6 @@ mod position;
 
 pub use position::Position;
 
-use types::hexagon::unifunc;
 pub use types::{GridType, hexagon, square, Cell};
 
 /// # the point of this crate!
