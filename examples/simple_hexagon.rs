@@ -1,7 +1,7 @@
 use macroquad::prelude::*;
 
 // the grid!
-use macrogrid::{Position, Grid};
+use macrogrid::{Grid, Position};
 
 #[macroquad::main("BasicHexGrid")]
 async fn main() {

@@ -1,12 +1,11 @@
 use macroquad::prelude::*;
 
-mod types;
+pub mod types;
 mod position;
 
 pub use position::Position;
 
-use types::{hexagon, square, Cell};
-pub use types::GridType;
+pub use types::{GridType, hexagon, square, Cell};
 
 /// # the point of this crate!
 /// used to represent and draw a grid to the screen
@@ -137,7 +136,7 @@ impl Grid {
     }
 
     // returns the (width, height) of each cell
-    fn calculate_dimensions(&self) -> (f32, f32) {
+    pub fn calculate_dimensions(&self) -> (f32, f32) {
         // in pixels
         let total_x_gap_space = (self.width_cells + 1) as f32 * self.gap;
         let total_y_gap_space = (self.height_cells + 1) as f32 * self.gap;
@@ -168,27 +167,22 @@ impl Grid {
                     }
                 }        
             },
-            GridType::HEXAGONF => {
+            GridType::HEXAGONF | GridType::HEXAGONP => {
                 // draw cells
                 let (cell_width, _cell_height) = self.calculate_dimensions();
         
                 for i in 0..self.height_cells {
                     for j in 0..self.width_cells {
-                        hexagon::draw_cell(self, i, j, cell_width, x_offset, y_offset, false);
-                    }
-                }   
-            },
-            GridType::HEXAGONP => {
-                // draw cells
-                let (cell_width, _cell_height) = self.calculate_dimensions();
-        
-                for i in 0..self.height_cells {
-                    for j in 0..self.width_cells {
-                        hexagon::draw_cell(self, i, j, cell_width, x_offset, y_offset, true);
+                        hexagon::draw_cell(self, i, j, cell_width, x_offset, y_offset);
                     }
                 }   
             },
         }
+    }
+    
+
+    pub fn get_type(&self) -> GridType {
+        self.gtype
     }
 
     /// # select a cell

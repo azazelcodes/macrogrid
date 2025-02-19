@@ -13,12 +13,9 @@ pub struct Cell {
     pub text_color: Option<macroquad::color::Color>,
 }
 
+#[derive(PartialEq, Clone, Copy)]
 pub enum GridType {
     SQUARE,
     HEXAGONF,
     HEXAGONP,
-}
-
-impl GridType {
-    
 }

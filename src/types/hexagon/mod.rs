@@ -1,6 +1,8 @@
 pub use crate::Grid;
 use macroquad::prelude::*;
 
+use crate::GridType;
+
 // only called from the double for loop in the draw function
 // this way it does not look crouded as fuck
 //
@@ -15,9 +17,8 @@ pub fn draw_cell(
     cell_size: f32,
     x_offset: f32,
     y_offset: f32,
-    pointy: bool,
 ) {
-    let (cell_width, cell_height) = if pointy {
+    let (cell_width, cell_height) = if grid.get_type() == GridType::HEXAGONP {
         (3.0_f32.sqrt() * cell_size, 2.0 * cell_size)
     } else {
         (2.0 * cell_size, 3.0_f32.sqrt() * cell_size)
@@ -25,14 +26,14 @@ pub fn draw_cell(
 
     // cell cords THIS IS VERY MESSY IMSO SORRY!!
     // width vs height scaling
-    let (x_scale, y_scale) = if pointy {
+    let (x_scale, y_scale) = if grid.get_type() == GridType::HEXAGONP {
         (1.0, 3.0 / 4.0)
     } else {
         (3.0 / 4.0, 1.0)
     };    
 
     // staggerinh
-    let (x_adjust, y_adjust) = if pointy {
+    let (x_adjust, y_adjust) = if grid.get_type() == GridType::HEXAGONP {
         (if row % 2 == 0 { 0.5 * cell_width } else { 0.0 }, 0.0) // ODD-R
     } else {
         (0.0, if col % 2 == 0 { 0.5 * cell_height } else { 0.0 }) // ODD-Q
@@ -68,7 +69,7 @@ pub fn draw_cell(
     // draw it!
     // *1.15 to avoid some missing gap issues. very weird :P
     // I believe this to be a macroquad issue!
-    draw_hexagon(x_pos, y_pos, cell_size, grid.gap * 1.15, pointy, grid.gap_color,color);
+    draw_hexagon(x_pos, y_pos, cell_size, grid.gap * 1.15, grid.get_type() == GridType::HEXAGONP, grid.gap_color,color);
 
     // draw the text if this cell has any
     if let Some(text) = &grid.cells[row][col].text {
@@ -181,6 +182,27 @@ pub mod unifunc {
             }
         }    
 
+        results
+    }
+
+    pub fn lerp_float(a: f32, b: f32, t: f32) -> f32 {
+        a + (b - a) * t
+    }
+
+    pub fn lerp_cube((aq, ar, ass): (i32, i32, i32), (bq, br, bs): (i32, i32, i32), t: f32) -> (i32, i32, i32) {
+        (
+            lerp_float(aq as f32, bq as f32, t) as i32,
+            lerp_float(ar as f32, br as f32, t) as i32,
+            lerp_float(ass as f32, bs as f32, t) as i32,
+        )
+    }
+
+    pub fn cube_line(a: (i32, i32, i32), b: (i32, i32, i32)) -> Vec<(i32, i32, i32)> {
+        let n = cube_dist(a, b);
+        let mut results: Vec<(i32, i32, i32)> = Vec::new();
+        for i in 0..n {
+            results.push(lerp_cube(a, b, 1.0 / n as f32 * i as f32));
+        }
         results
     }
 }
