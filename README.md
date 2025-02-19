@@ -14,13 +14,14 @@
 Docs included in the code. Sorry!
 </div>
 
-## NOTES
+## 🗺️ Content
 
-- the draw_rect function's impl does not match the draw_text function's
+- [<code>📦 Installation</code>](#-installation)
+- [<code>📑 Docs</code>](#-docs)
 
--- draw_rect takes in (x, y) as top left corner
+## 📦 Installation
+Simply install the crate from [crates.io](https://crates.io/crates/macrogrid)
 
--- draw_text takes in (x, y) as bottom left corner of text
-
-the rect is below and to the right of the given xy pair
-the text is above and to the right of the given xy pair
+## 📑 Docs
+Everything is documented in the code.\
+Partially available on [GHPages](https://azazelcodes.github.io/macrogrid/)
